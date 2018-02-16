@@ -73,7 +73,7 @@ filter: drop-shadow(-4px 5px 3px #888);
   cursor: nwse-resize;
 }
 
-/*
+
 .Note:hover {
   animation-name: wiggle;
   animation-timing-function: ease-in;
@@ -87,7 +87,7 @@ filter: drop-shadow(-4px 5px 3px #888);
 .NoAnimate:hover {
   animation: none;
 }
-*/
+
 
 @keyframes wiggle {
   0%   { transform: skewX(1deg); }
