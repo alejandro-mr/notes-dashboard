@@ -6,7 +6,11 @@ import NoteList from '../components/note_list';
 class NoteContainer extends Component {
   constructor() {
     super();
-    this.state = { notes: [] };
+    this.state = {
+      notes: [],
+      top: 0,
+      editing: false
+    };
   }
 
   componentDidMount() {
@@ -21,19 +25,22 @@ class NoteContainer extends Component {
         title: "Third",
         content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
       }],
-      top: 3
+      top: 3,
+      editing: false
     });
   }
 
   onDragStart = (e) => {
     if (e.preventDefault) e.preventDefault();
     if (e.stopPropagation) e.stopPropagation();
-    if (e.nativeEvent.which !== 1) {
+    if (e.nativeEvent.which !== 1 || this.state.editing) {
       return false;
     }
-
     let note = e.currentTarget;
+
     note.style.zIndex = this.state.top + 1;
+    e.currentTarget.classList.add("active", "NoAnimate");
+
     this.setState((prev) => {
       return {top: prev.top + 1}
     });
@@ -43,7 +50,6 @@ class NoteContainer extends Component {
       x: e.clientX - offset.left,
       y: e.clientY - offset.top
     }
-    e.currentTarget.classList.add("active", "NoAnimate");
     document.onmousemove = e => {
       let position = {
         x: (e.pageX - shift.x),
@@ -54,6 +60,8 @@ class NoteContainer extends Component {
       //note.style.transform = "translate3d(" + position.x + "px, " + position.y + "px, 0px)";
     }
     note.onmouseup = e => {
+      //note.style.left = (e.pageX - shift.x) + "px";
+      //note.style.top = (e.pageY - shift.y) + "px";
       note.classList.remove("active", "NoAnimate");
       document.onmousemove = function() { return false; };
       note.onmouseup = function() {return false; };
@@ -92,6 +100,41 @@ class NoteContainer extends Component {
     return false;
   }
 
+  touchResizeHandler = (e) => {
+    if (e.preventDefault) e.preventDefault();
+    if (e.stopPropagation) e.stopPropagation();
+    if (!e.touches) {
+      return false;
+    }
+
+    let elem = e.currentTarget;
+    let note = e.currentTarget.parentNode;
+    note.style.zIndex = this.state.top + 1;
+    this.setState((prev) => {
+      return {top: prev.top + 1}
+    });
+
+    let offset = note.getBoundingClientRect();
+    let start = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    }
+    //note.draggable = false;
+    note.classList.add("NoAnimate");
+    note.parentNode.touchmove = e => {
+      elem.parentNode.style.width =
+        (offset.right - offset.left) + (e.touches[0].clientX - start.x) + "px";
+      note.style.height =
+        (offset.bottom - offset.top) + (e.touches[0].clientY - start.y) + "px";
+    };
+    note.toucend = e => {
+      note.parentNode.touchmove = function() { return false; }
+      note.touchend = {};
+      note.draggable = true;
+      note.classList.remove("NoAnimate");
+    }
+  }
+
   onResizeDownHandler = (e) => {
     if (e.preventDefault) e.preventDefault();
     if (e.stopPropagation) e.stopPropagation();
@@ -113,15 +156,15 @@ class NoteContainer extends Component {
     }
     //note.draggable = false;
     note.classList.add("NoAnimate");
-    note.parentNode.onmousemove = e => {
+    document.onmousemove = e => {
       elem.parentNode.style.width =
         (offset.right - offset.left) + (e.clientX - start.x) + "px";
       note.style.height =
         (offset.bottom - offset.top) + (e.clientY - start.y) + "px";
     };
-    note.onmouseup = e => {
-      note.parentNode.onmousemove = function() { return false; }
-      note.onmouseup = {};
+    note.parentNode.onmouseup = e => {
+      document.onmousemove = function() { return false; }
+      note.parentNode.onmouseup = {};
       note.draggable = true;
       note.classList.remove("NoAnimate");
     }
@@ -133,11 +176,35 @@ class NoteContainer extends Component {
     e.currentTarget.parentNode.classList.remove('NoAnimate');
   }
 
-  onDragLeave() {
+  onDragLeave = (e) => {
+    return false;
+  }
+
+  onDoubleClick = (e) => {
+    /*
+    this.setState({
+      editing: true
+    });
+    */
+    let note = e.target.parentNode;
+    note.classList.add("NoAnimate");
+  }
+
+  onTextEdit = (index, val) => {
+    /*
+    this.setState({
+      notes: update(this.state.notes, {index: {content: {$set: val}}})
+    });
+    */
+  }
+
+  onTextChange = (e) => {
+    console.log(e.target.parentNode)
   }
 
   render() {
     return <NoteList notes={this.state.notes}
+             editing={this.state.editing}
              dropHandler={this.onDrop}
              dragLeaveHandler={this.onDragLeave}
              dragStartHandler={this.onDragStart}
@@ -145,7 +212,11 @@ class NoteContainer extends Component {
              dragOverHandler={this.onDragOver}
     dragEnterHandler={this.onDragEnter}
     resizeDownHandler={this.onResizeDownHandler}
-    resizeUpHandler={this.onResizeUpHandler}
+      resizeUpHandler={this.onResizeUpHandler}
+    touchResizeHandler={this.touchResizeHandler}
+    doubleClickHandler={this.onDoubleClick}
+    textEditHandler={this.onTextEdit}
+    textChangeHandler={this.onTextChange}
     />
     }
 }

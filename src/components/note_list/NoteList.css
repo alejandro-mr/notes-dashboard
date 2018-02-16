@@ -2,6 +2,7 @@
 
 .NoteContainer {
   margin: 15px 10px;
+  position: static !important;
 }
 
 .Note {
@@ -12,9 +13,9 @@
   min-height: 13rem;
   max-width: 32rem;
   max-height: 32rem;
-  margin: 0 0.625rem 0;
   padding: 0.625rem 0.9375rem;
 
+  transform: translateZ(0);
   filter: drop-shadow(-4px 5px 3px #656363) opacity(0.85);
 
   position: absolute;
@@ -88,6 +89,18 @@ filter: drop-shadow(-4px 5px 3px #888);
   animation: none;
 }
 
+.Editor {
+  width: 100%;
+  height: calc(100% - 2.813rem);
+  z-index: 5000;
+}
+.Editor textarea {
+  height: 100%;
+  width: 100%;
+  border: none;
+  background: transparent;
+  resize: none;
+}
 
 @keyframes wiggle {
   0%   { transform: skewX(1deg); }
