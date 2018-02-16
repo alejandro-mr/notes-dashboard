@@ -7,6 +7,11 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import Store, { history } from './store';
 
+import 'jquery';
+import 'popper.js/dist/popper.js';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.js';
+
 const StoreInstance = Store();
 
 ReactDOM.render(
