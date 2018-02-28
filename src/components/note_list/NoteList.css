@@ -5,83 +5,6 @@
   position: static !important;
 }
 
-.Note {
-  /* Sizing of box */
-  width: 18rem;
-  height: 18rem;
-  min-width: 13rem;
-  min-height: 13rem;
-  max-width: 32rem;
-  max-height: 32rem;
-  padding: 0.625rem 0.9375rem;
-
-  transform: translateZ(0);
-  filter: drop-shadow(-4px 5px 3px #656363) opacity(0.85);
-
-  position: absolute;
-  font: 400 0.875rem/1.2 'Merienda One', Helvetica, sans-serif;
-  color: rgba(0,0,0,0.8);
-  cursor: grab;
-
-  /* This is going to be removed as soon as i get a grid system implemented */
-  display: inline-block;
-  /*float: left;*/
-}
-
-.Note.active {
-  cursor: grabbing;
-  filter: opacity(0.4);
-}
-
-.Note:before {
-  z-index: -2;
-  content: "";
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: rgb(255, 228, 0);
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2.813rem), calc(100% - 2.813rem) calc(100% - 2.813rem), calc(100% - 2.813rem) 100%, 0 100%);
-  /*
-filter: drop-shadow(-4px 5px 3px #888);
-*/
-}
-
-.Fold {
-  filter: drop-shadow(-3px 1px 3px #777) opacity(0.9);
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 2.813rem;
-  height: 2.813rem;
-  /*
-  shape-outside: polygon(0 0, 0 100%, 100% 0);
-  shape-margin: 10px;
-  */
-}
-.Fold:before {
-  background: rgb(255, 228, 0);
-  content: "";
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 2.813rem;
-  height: 2.813rem;
-  clip-path: polygon(0 0, 0 100%, 100% 0);
-}
-.Fold:hover {
-  cursor: nwse-resize;
-}
-
-
-.Note:hover {
-  animation-name: wiggle;
-  animation-timing-function: ease-in;
-  animation-duration: 0.75s;
-  animation-iteration-count: infinite;
-}
-
 .NoAnimate {
   animation: none;
 }
@@ -100,27 +23,4 @@ filter: drop-shadow(-4px 5px 3px #888);
   border: none;
   background: transparent;
   resize: none;
-}
-
-@keyframes wiggle {
-  0%   { transform: skewX(1deg); }
-  10%  { transform: skewX(-1deg); }
-  25%  { transform: skewX(2deg); }
-  50%  { transform: skewX(-2deg); }
-  60%  { transform: skewX(1deg); }
-  75%  { transform: skewX(-1deg); }
-  100% { transform: skewX(0deg); }
-
-/*
-  10% { transform: skewX(-2deg); }
-  20% { transform: skewX(1deg); }
-  30% { transform: skewX(-2deg); }
-  40% { transform: skewX(1deg); }
-  50% { transform: skewX(-1deg); }
-  60% { transform: skewX(1deg); }
-  70% { transform: skewX(-1deg); }
-  80% { transform: skewX(0deg); }
-  90% { transform: skewX(0deg); }
-  100% { transform: skewX(0deg); }
-*/
 }

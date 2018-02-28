@@ -1,22 +1,25 @@
-import React, { Component } from 'react';
+// @flow
 
+import React from 'react';
 import './Note.css';
+import './Colors.css';
 
-class Note extends Component {
-  render() {
-    return (
-      <div className="Note"
-        draggable="true"
-        onDragStart={this.props.dragStart}
-        onDragOver={this.props.dragOver}
-        onDragEnd={this.props.dragEnd}
-      >
-        {this.props.body}
-          <div className="Fold">
-          </div>
-      </div>
-    );
- }
-}
+type Props = {
+  id: number,
+  content: string,
+  dragStartHandler: SyntethicMouseEvent,
+  resizeDownHandler: SyntethicMouseEvent
+};
+
+const Note = (props: Props) => (
+  <div className="note">
+    <div className="drag" onMouseDown={props.dragStartHandler} />
+    <p>
+        {props.content}
+    </p>
+  <div className="fold"
+    onMouseDown={props.resizeDownHandler} />
+  </div>
+);
 
 export default Note;

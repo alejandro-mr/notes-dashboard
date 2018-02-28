@@ -1,36 +1,28 @@
-import React from 'react';
+import React, { Component } from 'react';
+import Note from '../note';
 
 import './NoteList.css';
 
-const NoteList = (props) => (
-  <div
-    className="NoteContainer col-sm"
-/*
-    onDrop={props.dropHandler}
-    onDragLeave={props.dragLeaveHandler}
-    onDragEnter={props.dragEnterHandler}
-    onDragOver={props.dragOverHandler}
-  onDragEnd={props.dragEndHandler}
-  */ 
-  >
-    {props.notes.map(({ content }, index) =>
-      <div
-        className="Note"
-      key={index}
-        //draggable="true"
-        //onDragStart={ e => { return false } }
-      onMouseDown={props.dragStartHandler}
-      //onMouseUp={props.dragEndHandler}
-      style={{zIndex: index + 1}}
-      >
-        <p>
-        {content}
-        </p>
-        <div className="Fold" onMouseDown={props.resizeDownHandler} onMouseUp={props.resizeUpHandler}>
-        </div>
-      </div>
-    )}
-  </div>
-);
+class NoteList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      content: "",
+      editing: -1
+    }
+  }
 
+  render() {
+    return (
+      <div className="NoteContainer col-sm">
+      {this.props.notes.map(({ id, content }) =>
+        <Note id={id} key={id} content={content}
+          dragStartHandler={this.props.dragStartHandler}
+          resizeDownHandler={this.props.resizeDownHandler}
+        />
+      )}
+      </div>
+    )
+  }
+}
 export default NoteList;

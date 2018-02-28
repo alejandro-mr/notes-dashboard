@@ -1,0 +1,30 @@
+.yellow:before {
+  background-color: rgb(254, 225, 0);
+}
+.orange:before {
+  background-color: rgb(249, 139, 60);
+}
+.pink:before {
+  background-color: rgb(255, 34, 157);
+}
+.red:before {
+  background-color: rgb(249, 56, 75);
+}
+.magenta:before {
+  background-color: rgb(242, 69, 176);
+}
+.purple:before {
+  background-color: rgb(151, 51, 155);
+}
+.light_green:before {
+  background-color: rgb(204, 255, 226);
+}
+.green:before {
+  background-color: rgb(115, 215, 41);
+}
+.light_blue:before {
+  backgroun-color: rgb(0, 176, 168);
+}
+.blue:before {
+  background-color: rgb(0, 147, 208);
+}

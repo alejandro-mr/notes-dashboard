@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import Dashboard from './Dashboard';
 import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
@@ -17,7 +17,7 @@ const StoreInstance = Store();
 ReactDOM.render(
   <Provider store={StoreInstance}>
     <ConnectedRouter history={history}>
-      <App />
+      <Dashboard />
       </ConnectedRouter>
   </Provider>,
   document.getElementById('root')
