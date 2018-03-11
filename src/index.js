@@ -7,18 +7,20 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import Store, { history } from './store';
 
+import initialState from './notes-test.json';
+
 //import 'jquery';
 //import 'popper.js/dist/popper.js';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 
-const StoreInstance = Store();
+const StoreInstance = Store(initialState);
 
 ReactDOM.render(
   <Provider store={StoreInstance}>
     <ConnectedRouter history={history}>
       <Dashboard />
-      </ConnectedRouter>
+    </ConnectedRouter>
   </Provider>,
   document.getElementById('root')
 );

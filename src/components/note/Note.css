@@ -2,8 +2,8 @@
 
 .note {
   /* Sizing of box */
-  width: 18rem;
-  height: 18rem;
+  width: 24rem;
+  height: 24rem;
   min-width: 13rem;
   min-height: 13rem;
   max-width: 32rem;
@@ -39,6 +39,8 @@ filter: drop-shadow(-4px 5px 3px #888);
 
 .note p {
   padding: 0.625rem 0.9375rem;
+  overflow: hidden;
+  max-height: 81%;
 }
 
 .fold {
