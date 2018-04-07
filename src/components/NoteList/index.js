@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import Note from '../note';
+import Note from '../Note';
 
 //import './NoteList.css';
 
 
 const NoteListWrapper = styled.section`
-    margin: 15px 0;
-    height: 100%;
-`
+  margin: 0.938rem;
+  height: 100%;
+`;
 
 const NoteList = ({notes, top, resizeNote, updateNotePosition, updateTop}) => {
 
@@ -96,7 +96,7 @@ const NoteList = ({notes, top, resizeNote, updateNotePosition, updateTop}) => {
   }
 
   return (
-    <NoteListWrapper className="col" onTouchMove={onScroll}>
+    <NoteListWrapper onTouchMove={onScroll}>
       {notes.map(note => (
         <Note key={note.id} {...note}
           onNoteDrag={e => {

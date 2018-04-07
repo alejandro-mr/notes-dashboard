@@ -8,7 +8,7 @@ import {
   setNotePosition,
   setTop
 } from '../actions';
-import NoteList from '../components/note_list';
+import NoteList from '../components/NoteList';
 
 const mapStateToProps = state => {
   return {
@@ -31,6 +31,9 @@ const mapDispatchToProps = dispatch => {
     updateNotePosition: (id: string, position: Position) => {
       dispatch(setNotePosition(id, position))
       dispatch(setTop(position.z))
+    },
+    updateTop: (top) => {
+      dispatch(setTop(top));
     }
   }
 }
