@@ -1,9 +1,16 @@
 import React from 'react';
+import styled from 'styled-components';
 import Note from '../note';
 
-import './NoteList.css';
+//import './NoteList.css';
 
-const NoteList = ({notes, top, resizeNote, updateNotePosition}) => {
+
+const NoteListWrapper = styled.section`
+    margin: 15px 0;
+    height: 100%;
+`
+
+const NoteList = ({notes, top, resizeNote, updateNotePosition, updateTop}) => {
 
   const onNoteDrag = (e: SyntethicMouseEvent, id: string) => {
     e.preventDefault();
@@ -13,7 +20,7 @@ const NoteList = ({notes, top, resizeNote, updateNotePosition}) => {
 
     let note = e.currentTarget.parentNode;
 
-    note.style.zIndex = (top + 1).toString();
+    note.style.zIndex = (notes.lenght + 1 * 10).toString();
     note.classList.add("active");
 
     let offset = note.getBoundingClientRect();
@@ -29,13 +36,13 @@ const NoteList = ({notes, top, resizeNote, updateNotePosition}) => {
       }
       note.style.left = position.x + "px";
       note.style.top = position.y + "px";
-
       //note.style.transform = "translate3d(" + position.x + "px, " + position.y + "px, 0px)";
     }
-    note.onmouseup = e => {
+    document.onmouseup = e => {
+      console.log('Mouse up');
       note.classList.remove("active");
       document.onmousemove = null;
-      note.onmouseup = null;
+      document.onmouseup = null;
 
       //Calling action to save new Note position.
       updateNotePosition(id, {
@@ -54,7 +61,7 @@ const NoteList = ({notes, top, resizeNote, updateNotePosition}) => {
 
     let note = e.currentTarget.parentNode;
 
-    note.style.zIndex = (top + 1).toString();
+    note.style.zIndex = (notes.lenght + 1).toString();
 
     let offset = note.getBoundingClientRect();
     let start = {
@@ -77,8 +84,19 @@ const NoteList = ({notes, top, resizeNote, updateNotePosition}) => {
     }
   }
 
+  const onNoteSelect = (e) => {
+    const note = e.currentTarget;
+    note.style.zIndex = ((notes.lenght + 1) * 10).toString();
+    updateTop(top + 1);
+  }
+
+  const onScroll = (e) => {
+    e.preventDefault();
+    console.log(e.touches[0].clientX, e.touches[0].clientY);
+  }
+
   return (
-    <section className="NoteContainer">
+    <NoteListWrapper className="col" onTouchMove={onScroll}>
       {notes.map(note => (
         <Note key={note.id} {...note}
           onNoteDrag={e => {
@@ -87,9 +105,10 @@ const NoteList = ({notes, top, resizeNote, updateNotePosition}) => {
           onNoteResize={e => {
             onNoteResize(e, note.id)
           }}
+          onNoteSelect={onNoteSelect}
         />
       ))}
-    </section>
+    </NoteListWrapper>
   )
 }
 export default NoteList;
