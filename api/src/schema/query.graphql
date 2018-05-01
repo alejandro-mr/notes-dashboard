@@ -1,0 +1,4 @@
+type Query {
+  notes: [Note]
+  note(id: ID!): Note
+}

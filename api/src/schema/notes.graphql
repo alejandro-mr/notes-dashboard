@@ -1,0 +1,28 @@
+type Note {
+  _id: String,
+  title: String,
+  content: String!,
+  position: Position!,
+  width: Int!
+  height: Int!
+}
+
+type Position {
+  x: Int!,
+  y: Int!,
+  z: Int!
+}
+
+input NoteInput {
+  title: String,
+  content: String!,
+  position: PositionInput!,
+  width: Int!
+  height: Int!
+}
+
+input PositionInput {
+  x: Int!,
+  y: Int!,
+  z: Int!
+}

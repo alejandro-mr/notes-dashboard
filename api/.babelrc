@@ -4,9 +4,11 @@
       "targets": {
         "node": "current"
       }
-    }]
+    }],
+    "stage-3"
   ],
   "plugins": [
-    "babel-plugin-inline-import"
+    "babel-plugin-inline-import",
+    "babel-plugin-transform-object-rest-spread"
   ]
 }

@@ -25,6 +25,6 @@ services:
       - ./api/server.js:/usr/src/app/server.js
       - ./api/yarn.lock:/usr/src/app/yarn.lock
       - ./api/package.json:/usr/src/app/package.json
-    command: nodemon
+    command: nodemon --exec npm start
     environment:
       - DB_URL=mongodb://db:27017/notes_db

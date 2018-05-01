@@ -4,8 +4,8 @@ import Hapi from 'hapi';
 import mongoose from 'mongoose';
 import { graphqlHapi, graphiqlHapi } from 'apollo-server-hapi';
 
-import typeDefs from './src/schema.graphql';
-import resolvers from './src/resolvers.js';
+import typeDefs from './src/schema/';
+import resolvers from './src/resolvers';
 
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 
@@ -16,6 +16,9 @@ async function StartServer() {
   const server = new Hapi.server({
     host: HOST,
     port: PORT,
+    debug: {
+      request: ['error'],
+    },
   });
 
   mongoose.connect(process.env.DB_URL);
