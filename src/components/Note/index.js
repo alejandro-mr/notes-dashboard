@@ -24,10 +24,21 @@ const NoteWrapper = styled.div`
   overflow: hidden;
 
   transform: translateZ(0);
-  filter: drop-shadow(-4px 5px 3px #656363) /*opacity(0.85)*/;
+  filter: drop-shadow(-1px 2px 1px #656363) /*opacity(0.85)*/;
+  //box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+
+  // Second style of material design
+  //box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  //transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 
   color: rgba(0,0,0,0.8);
   background: rgb(255, 228, 0);
+
+/*
+  &:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  }
+*/
 
   &:nth-child(n+2) {
     margin-top: 0.75rem;
@@ -60,7 +71,7 @@ const NoteWrapper = styled.div`
     max-width: 32rem;
     max-height: 32rem;
 
-    &:before {
+    &::before {
       z-index: -2;
       content: "";
       width: 100%;
@@ -105,7 +116,7 @@ const NoteResizer = styled.div`
     shape-margin: 10px;
     */
 
-    &:before {
+    &::before {
       background: rgb(255, 228, 0);
       content: "";
       position: absolute;
@@ -146,13 +157,19 @@ const NoteDragger = styled.div`
   }
 `;
 
+const NoteDelete = styled.div`
+  float: right;
+  color: red;
+`;
+
 const Note = (props: Props) => (
-  <NoteWrapper>
+    <NoteWrapper>
+    <NoteDelete onClick={props.onNoteDelete}>&#128473;</NoteDelete>
     <NoteDragger onMouseDown={props.onNoteDrag} />
     <NoteText>
         {props.content}
     </NoteText>
-  <NoteResizer onMouseDown={props.onNoteResize} />
+    <NoteResizer onMouseDown={props.onNoteResize} />
   </NoteWrapper>
 );
 

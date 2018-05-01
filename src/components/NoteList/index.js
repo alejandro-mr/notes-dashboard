@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Note from '../Note';
+import CreateNote from '../CreateNote';
 
 //import './NoteList.css';
 
@@ -10,7 +11,7 @@ const NoteListWrapper = styled.section`
   height: 100%;
 `;
 
-const NoteList = ({notes, top, resizeNote, updateNotePosition, updateTop}) => {
+const NoteList = ({notes, top, resizeNote, updateNotePosition, updateTop, addNote, deleteNote, updateNote}) => {
 
   const onNoteDrag = (e: SyntethicMouseEvent, id: string) => {
     e.preventDefault();
@@ -95,20 +96,53 @@ const NoteList = ({notes, top, resizeNote, updateNotePosition, updateTop}) => {
     console.log(e.touches[0].clientX, e.touches[0].clientY);
   }
 
+  const onCreateNoteHandler = (e) => {
+    e.preventDefault();
+    addNote(
+      256,
+      'title',
+      'lulululululul',
+      {
+        x: 0,
+        y: 0,
+        z: 0
+      }
+    );
+  }
+
+  const onNoteDelete = (e, id: numeric) => {
+    e.preventDefault();
+    deleteNote(id);
+  }
+
+  const onNoteUpdate = (e, note: Note) => {
+    e.preventDefault();
+    updateNote(note);
+  }
+
   return (
-    <NoteListWrapper onTouchMove={onScroll}>
-      {notes.map(note => (
+    <React.Fragment>
+      <NoteListWrapper>
+      {notes.map((note, index) => (
         <Note key={note.id} {...note}
           onNoteDrag={e => {
-            onNoteDrag(e, note.id)
+              onNoteDrag(e, note.id)
           }}
           onNoteResize={e => {
-            onNoteResize(e, note.id)
+              onNoteResize(e, note.id)
           }}
           onNoteSelect={onNoteSelect}
+          onNoteDelete={e => {
+            onNoteDelete(e, index)
+          }}
+          onNoteUpdate={e => {
+            onNoteUpdate(e, note)
+          }}
         />
       ))}
-    </NoteListWrapper>
+      </NoteListWrapper>
+      <CreateNote createNewHandler={onCreateNoteHandler} />
+    </React.Fragment>
   )
 }
 export default NoteList;

@@ -8,6 +8,13 @@ import {
   setNotePosition,
   setTop
 } from '../actions';
+
+import {
+  addNote,
+  deleteNote,
+  updateNote
+} from '../actions/actionCreators';
+
 import NoteList from '../components/NoteList';
 
 const mapStateToProps = state => {
@@ -23,17 +30,38 @@ type Position = {
   x: number
 }
 
+type Note = {
+  id: string,
+  title: string,
+  content: string,
+  position: Position
+}
+
 const mapDispatchToProps = dispatch => {
   return {
-    resizeNote: (id: string, width: number, height: number) => {
+    resizeNote: (id: number, width: number, height: number) => {
       dispatch(setNoteSize(id, width, height))
     },
-    updateNotePosition: (id: string, position: Position) => {
+    updateNotePosition: (id: number, position: Position) => {
       dispatch(setNotePosition(id, position))
       dispatch(setTop(position.z))
     },
     updateTop: (top) => {
       dispatch(setTop(top));
+    },
+    addNote: (id: number, title: string, content: string, position: Position) => {
+      dispatch(addNote({
+        id: id,
+        title: title,
+        content: content,
+        ...position
+      }));
+    },
+    deleteNote: (id: number) => {
+      dispatch(deleteNote(id));
+    },
+    updateNote: (id: number, note: Note) => {
+      dispatch(updateNote(note));
     }
   }
 }

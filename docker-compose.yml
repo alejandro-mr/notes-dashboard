@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3.6"
 
 services:
   web:
@@ -10,3 +10,19 @@ services:
       - ./yarn.lock:/app/yarn.lock
       - ./package.json:/app/package.json
     command: yarn start
+  db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - ../notes-dashboard-db/data:/data/db
+  server:
+    build: ../notes-dashboard-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../notes-dashboard-backend/app/yarn.lock:/usr/src/app/yarn.lock
+      - ../notes-dashboard-backend/app/package.json:/usr/src/app/package.json
+    command: nodemon
+    environment:
+      - DB_URL=mongodb://db:27017/notes_db
