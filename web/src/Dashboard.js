@@ -41,9 +41,9 @@ class Dashboard extends Component<{}> {
 
   render() {
     return (
-      <div className="row full-height" onWheel={() => { return false; }}>
+      //<div className="row full-height" onWheel={() => { return false; }}>
         <NoteContainer />
-      </div>
+      //</div>
     );
   }
 }
