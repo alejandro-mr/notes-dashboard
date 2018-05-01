@@ -2,27 +2,29 @@ version: "3.6"
 
 services:
   web:
-    build: .
+    build: ./web/
     ports:
       - "3000:3000"
     volumes:
-      - ./src:/app/src
-      - ./yarn.lock:/app/yarn.lock
-      - ./package.json:/app/package.json
+      - ./web/src:/app/src
+      - ./web/yarn.lock:/app/yarn.lock
+      - ./web/package.json:/app/package.json
     command: yarn start
   db:
     image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
-      - ../notes-dashboard-db/data:/data/db
-  server:
-    build: ../notes-dashboard-backend
+      - ./db/data:/data/db
+  api:
+    build: ./api
     ports:
       - "8080:8080"
     volumes:
-      - ../notes-dashboard-backend/app/yarn.lock:/usr/src/app/yarn.lock
-      - ../notes-dashboard-backend/app/package.json:/usr/src/app/package.json
+      - ./api/src:/usr/src/app/src
+      - ./api/server.js:/usr/src/app/server.js
+      - ./api/yarn.lock:/usr/src/app/yarn.lock
+      - ./api/package.json:/usr/src/app/package.json
     command: nodemon
     environment:
       - DB_URL=mongodb://db:27017/notes_db
