@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import Note from '../Note';
 import CreateNote from '../CreateNote';
 
-//import './NoteList.css';
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
 
 
 const NoteListWrapper = styled.section`
@@ -120,26 +121,51 @@ const NoteList = ({notes, top, resizeNote, updateNotePosition, updateTop, addNot
     updateNote(note);
   }
 
+  const GET_NOTES = gql`
+    {
+      notes {
+        _id
+        title
+        content
+        position {
+          x
+          y
+          z
+        }
+        width
+        height
+      }
+    }
+  `;
+
   return (
     <React.Fragment>
       <NoteListWrapper>
-      {notes.map((note, index) => (
-        <Note key={note.id} {...note}
-          onNoteDrag={e => {
-              onNoteDrag(e, note.id)
+        <Query query={GET_NOTES}>
+          {({ loading, error, data }) => {
+             if (loading) return <p>Loading notes...</p>;
+            if (error) return <p>An error ocurred...</p>;
+
+             return data.notes.map((note, index) => (
+               <Note key={note._id} {...note}
+               onNoteDrag={e => {
+                 onNoteDrag(e, note._id)
+               }}
+               onNoteResize={e => {
+                 onNoteResize(e, note._id)
+               }}
+               onNoteSelect={onNoteSelect}
+               onNoteDelete={e => {
+                 onNoteDelete(e, index)
+               }}
+               onNoteUpdate={e => {
+                 onNoteUpdate(e, note)
+               }}
+               />
+             ));
+
           }}
-          onNoteResize={e => {
-              onNoteResize(e, note.id)
-          }}
-          onNoteSelect={onNoteSelect}
-          onNoteDelete={e => {
-            onNoteDelete(e, index)
-          }}
-          onNoteUpdate={e => {
-            onNoteUpdate(e, note)
-          }}
-        />
-      ))}
+        </Query>
       </NoteListWrapper>
       <CreateNote createNewHandler={onCreateNoteHandler} />
     </React.Fragment>

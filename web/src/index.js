@@ -14,6 +14,13 @@ import initialState from './notes-test.json';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 
+import ApolloClient from "apollo-boost";
+import { ApolloProvider } from "react-apollo";
+
+const client = new ApolloClient({
+  uri: "http://localhost:8080/graphql"
+});
+
 /*
 import firebase from 'firebase';
 
@@ -35,11 +42,13 @@ notesRef.once('value').then(function(snapshot) {
 const StoreInstance = Store(initialState);
 
 ReactDOM.render(
-  <Provider store={StoreInstance}>
+    <Provider store={StoreInstance}>
+  <ApolloProvider client={client}>
     <ConnectedRouter history={history}>
       <Dashboard />
     </ConnectedRouter>
-  </Provider>,
+  </ApolloProvider>
+    </Provider>,
   document.getElementById('root')
 );
 //Removed for development bring back for production build
