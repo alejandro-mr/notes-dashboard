@@ -1,8 +1,7 @@
-import db from '../connectors/note';
+import { pubsub, Note as db } from '../connectors';
+import { NOTE_ADDED } from '../resolvers/notes';
 
-const create = (note) => {
-  return db.create(note);
-};
+const create = (note) => db.create(note);
 
 const find = () => {
   return db.find();

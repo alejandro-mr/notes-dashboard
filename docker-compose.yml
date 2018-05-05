@@ -18,8 +18,11 @@ services:
       - ./db/data:/data/db
   api:
     build: ./api
+    depends_on:
+      - db
     ports:
       - "8080:8080"
+      - "5000:5000"
     volumes:
       - ./api/src:/usr/src/app/src
       - ./api/server.js:/usr/src/app/server.js
