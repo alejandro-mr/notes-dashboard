@@ -16,6 +16,7 @@ const PORT = 8080;
 const WS_PORT = 5000;
 
 async function StartServer() {
+  /* GraphQL Api server configuration */
   const server = new Hapi.server({
     host: HOST,
     port: PORT,
@@ -55,11 +56,14 @@ async function StartServer() {
     },
   });
 
-  const websocketServer = createServer(server);
-  await websocketServer.listen({
+  /* Setting up subscriptions websocket server */
+  const wsServer = new Hapi.server({
     host: HOST,
-    port: WS_PORT
-  }, () => console.log(`Websocket Server is now running on http://${HOST}:${WS_PORT}/subscriptions`));
+    port: WS_PORT,
+    debug: {
+      request: ['error'],
+    },
+  });
 
   const subscriptionServer = SubscriptionServer.create(
     {
@@ -68,18 +72,20 @@ async function StartServer() {
       subscribe,
     },
     {
-      server: websocketServer,
+      server: wsServer.listener,
       path: '/subscriptions',
     }
   );
 
   try {
     await server.start();
+    await wsServer.start();
   } catch (err) {
     console.log(`Error while starting server: ${err.message}`);
   }
 
   console.log(`Server running at: ${server.info.uri}`);
+  console.log(`Subscription server running at: ${wsServer.info.uri}`);
 }
 
 StartServer();
