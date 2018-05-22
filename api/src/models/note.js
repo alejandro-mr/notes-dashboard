@@ -11,9 +11,13 @@ const findById = (id) => {
   return db.findById(id);
 };
 
+const findByIdAndDelete = (id) => {
+  return db.findByIdAndDelete(id);
+};
 
 export const Note = {
   create,
   find,
-  findById
+  findById,
+  findByIdAndDelete,
 };

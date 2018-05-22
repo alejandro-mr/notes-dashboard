@@ -12,6 +12,9 @@ const resolvers = {
     createNote: (_, { note }) => {
       pubsub.publish(NOTE_ADDED, {'note': note});
       return Note.create(note);
+    },
+    deleteNote: (_, { id }) => {
+      return Note.findByIdAndDelete(id);
     }
   },
   Subscription: {
