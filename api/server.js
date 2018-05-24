@@ -1,6 +1,7 @@
 import Hapi from 'hapi';
 import mongoose from 'mongoose';
-import { graphqlHapi, graphiqlHapi } from 'apollo-server-hapi';
+import { graphqlHapi } from 'apollo-server-hapi';
+import hapiPlayground from 'graphql-playground-middleware-hapi';
 
 import { createServer } from 'http';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
@@ -38,6 +39,7 @@ async function StartServer() {
       path: '/graphql',
       graphqlOptions: {
         schema: executableSchema,
+        tracing: true,
       },
       route: {
         cors: true,
@@ -46,13 +48,11 @@ async function StartServer() {
   });
 
   await server.register({
-    plugin: graphiqlHapi,
+    plugin: hapiPlayground,
     options: {
-      path: '/graphiql',
-      graphiqlOptions: {
-        endpointURL: '/graphql',
-        subscriptionsEndpoint: `ws://localhost:${WS_PORT}/subscriptions`
-      },
+      path: '/playground',
+      endpoint: '/graphql',
+      subscriptionEndpoint: `ws://localhost:${WS_PORT}/subscriptions`,
     },
   });
 
