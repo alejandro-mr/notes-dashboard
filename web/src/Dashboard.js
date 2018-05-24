@@ -2,12 +2,9 @@
 
 import React, {Component} from 'react';
 ///import { Route, Link } from 'react-router-dom';
-import NoteContainer from './containers/NoteContainer.js';
+import NotesContainer from './containers/NotesContainer';
 
-import './Dashboard.css';
-
-class Dashboard extends Component<{}> {
-
+class Dashboard extends Component {
   /*
   onScrollZoom = (e) => {
     let pageZoom = parseFloat(document.documentElement.style.zoom, 10) || 1; 
@@ -41,9 +38,7 @@ class Dashboard extends Component<{}> {
 
   render() {
     return (
-      //<div className="row full-height" onWheel={() => { return false; }}>
-        <NoteContainer />
-      //</div>
+      <NotesContainer />
     );
   }
 }
