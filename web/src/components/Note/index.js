@@ -1,9 +1,12 @@
 // @flow
 
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
-//import './Note.css';
-//import './Colors.css';
+import { Mutation } from 'react-apollo';
+import Hammer from 'hammerjs';
+
+import { DELETE_NOTE } from '../../mutations';
+import { GET_NOTES } from '../../queries';
 
 type Props = {
   id: number,
@@ -32,6 +35,7 @@ const NoteWrapper = styled.div`
   //transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 
   color: rgba(0,0,0,0.8);
+  //font: 400 0.875rem/1.2 'Merienda One', Helvetica, sans-serif;
   background: rgb(255, 228, 0);
 
 /*
@@ -162,15 +166,104 @@ const NoteDelete = styled.div`
   color: red;
 `;
 
+class Note extends Component<Props> {
+  componentDidMount() {
+    this.hammer = Hammer(this.note);
+    this.hammer.get('pan').set({
+      direction: Hammer.DIRECTION_ALL,
+    });
+    this.hammer.on('panright', e => {
+      const boundaryX = e.target.getBoundingClientRect().width;
+      this.note.style.transform = 'translateX(' + e.deltaX + 'px)';
+
+      if (e.deltaX > boundaryX) {
+        // trigger note deletion from apollo-cache;
+      }
+    });
+  }
+
+  render() {
+    return (
+      <NoteWrapper innerRef={note => { this.note = note }}>
+        <Mutation mutation={DELETE_NOTE}>
+          {(deleteNote, { loading, error }) => (
+            <NoteDelete
+              onClick={e => {
+                  e.preventDefault();
+                  deleteNote({
+                    variables: { id: this.props._id },
+                    update: (cache, { data: { deleteNote }}) => {
+                      const { notes } = cache.readQuery({ query: GET_NOTES });
+                      const index = notes.findIndex(note => (note._id === deleteNote._id));
+                      cache.writeQuery({
+                        query: GET_NOTES,
+                        data: {
+                          notes: [
+                            ...notes.slice(0, index),
+                            ...notes.slice(index + 1)
+                          ]
+                        }
+                      });
+                    }
+                  });
+              }}
+            >
+              <i className="material-icons">
+                clear
+              </i>
+            </NoteDelete>
+          )}
+        </Mutation>
+        <NoteDragger onMouseDown={this.props.onNoteDrag} />
+        <NoteText>
+          {this.props.content}
+        </NoteText>
+        <NoteResizer onMouseDown={this.props.onNoteResize} />
+      </NoteWrapper>
+    );
+  }
+}
+
+// this was a presentational container, now commented because componentDidMount is needed to attach hammerjs events.
+/*
 const Note = (props: Props) => (
-    <NoteWrapper>
-    <NoteDelete onClick={props.onNoteDelete}>&#128473;</NoteDelete>
+  <NoteWrapper>
+    <Mutation
+      mutation={DELETE_NOTE}
+      update={(cache, { data: { deleteNote }}) => {
+        const { notes } = cache.readQuery({ query: GET_NOTES });
+
+        const index = notes.findIndex(note => (note._id === deleteNote._id));
+
+        cache.writeQuery({
+          query: GET_NOTES,
+          data: {
+            notes: [
+              ...notes.slice(0, index),
+              ...notes.slice(index + 1)
+            ]
+          }
+        });
+      }}
+    >
+      {(deleteNote, { loading, error }) => (
+        <NoteDelete
+          onClick={e => {
+            e.preventDefault();
+            deleteNote({ variables: { id: props._id } });
+          }}
+        >
+          &#128473;
+        </NoteDelete>
+      )}
+    </Mutation>
     <NoteDragger onMouseDown={props.onNoteDrag} />
     <NoteText>
-        {props.content}
+      {props.content}
     </NoteText>
     <NoteResizer onMouseDown={props.onNoteResize} />
   </NoteWrapper>
 );
+*/
 
 export default Note;

@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import Note from '../Note';
 import CreateNote from '../CreateNote';
 
-import { Query } from "react-apollo";
+import { ApolloConsumer, Query } from "react-apollo";
 import gql from "graphql-tag";
 
 
@@ -12,7 +13,9 @@ const NoteListWrapper = styled.section`
   height: 100%;
 `;
 
-const NoteList = ({notes, top, resizeNote, updateNotePosition, updateTop, addNote, deleteNote, updateNote}) => {
+const NoteList = () => {
+
+  const notes =  []
 
   const onNoteDrag = (e: SyntethicMouseEvent, id: string) => {
     e.preventDefault();
@@ -47,11 +50,13 @@ const NoteList = ({notes, top, resizeNote, updateNotePosition, updateTop, addNot
       document.onmouseup = null;
 
       //Calling action to save new Note position.
+      /*
       updateNotePosition(id, {
         x: (e.pageX - shift.x),
         y: (e.pageY - shift.y),
         z: (top + 1)
       })
+      */
     }
   }
 
@@ -82,14 +87,14 @@ const NoteList = ({notes, top, resizeNote, updateNotePosition, updateTop, addNot
       document.onmouseup = null;
 
       //Calling action to save new note size.
-      resizeNote(id, note.style.width, note.style.height);
+      //resizeNote(id, note.style.width, note.style.height);
     }
   }
 
   const onNoteSelect = (e) => {
     const note = e.currentTarget;
     note.style.zIndex = ((notes.lenght + 1) * 10).toString();
-    updateTop(top + 1);
+    //updateTop(top + 1);
   }
 
   const onScroll = (e) => {
@@ -99,6 +104,7 @@ const NoteList = ({notes, top, resizeNote, updateNotePosition, updateTop, addNot
 
   const onCreateNoteHandler = (e) => {
     e.preventDefault();
+    /*
     addNote(
       256,
       'title',
@@ -109,16 +115,17 @@ const NoteList = ({notes, top, resizeNote, updateNotePosition, updateTop, addNot
         z: 0
       }
     );
+    */
   }
 
   const onNoteDelete = (e, id: numeric) => {
     e.preventDefault();
-    deleteNote(id);
+    //deleteNote(id);
   }
 
   const onNoteUpdate = (e, note: Note) => {
     e.preventDefault();
-    updateNote(note);
+    //updateNote(note);
   }
 
   const GET_NOTES = gql`
