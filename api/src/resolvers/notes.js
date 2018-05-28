@@ -14,7 +14,7 @@ const resolvers = {
       return Note.create(note);
     },
     deleteNote: (_, { id }) => {
-      return Note.findByIdAndDelete(id);
+      return Note.findByIdAndDelete(id).exec();
     }
   },
   Subscription: {
