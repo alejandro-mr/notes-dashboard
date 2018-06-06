@@ -195,6 +195,9 @@ class Note extends Component<Props> {
                     update: (cache, { data: { deleteNote }}) => {
                       const { notes } = cache.readQuery({ query: GET_NOTES });
                       const index = notes.findIndex(note => (note._id === deleteNote._id));
+
+                      if (index < 0) return null;
+
                       cache.writeQuery({
                         query: GET_NOTES,
                         data: {
@@ -204,6 +207,13 @@ class Note extends Component<Props> {
                           ]
                         }
                       });
+                    },
+                    optimisticResponse: {
+                      __typename: 'Mutation',
+                      deleteNote: {
+                        __typename: 'Note',
+                        _id: this.props._id
+                      }
                     }
                   });
               }}
