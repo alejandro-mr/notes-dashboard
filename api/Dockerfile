@@ -1,4 +1,4 @@
-FROM node:8.11.1
+FROM node:8.11.2
 
 RUN yarn global add nodemon babel-cli
 RUN mkdir -p /usr/src/app

@@ -20,6 +20,7 @@ services:
     build: ./api
     depends_on:
       - db
+      - message_broker
     ports:
       - "8080:8080"
       - "5000:5000"
@@ -28,6 +29,13 @@ services:
       - ./api/server.js:/usr/src/app/server.js
       - ./api/yarn.lock:/usr/src/app/yarn.lock
       - ./api/package.json:/usr/src/app/package.json
-    command: nodemon --exec npm start
+    command: nodemon -e js,graphql,json --exec npm start
     environment:
       - DB_URL=mongodb://db:27017/notes_db
+      - BROKER_HOST=message_broker
+      - BROKER_PORT=6379
+  message_broker:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+

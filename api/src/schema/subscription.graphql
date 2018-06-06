@@ -1,3 +1,4 @@
 type Subscription {
-  note: Note!
+  noteAdded: Note!
+  noteDeleted: Note!
 }

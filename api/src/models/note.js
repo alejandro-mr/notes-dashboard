@@ -1,4 +1,4 @@
-import { pubsub, Note as db } from '../connectors';
+import { Note as db } from '../connectors';
 import { NOTE_ADDED } from '../resolvers/notes';
 
 const create = (note) => db.create(note);
