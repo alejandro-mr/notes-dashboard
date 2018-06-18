@@ -1,7 +1,10 @@
 import { Note } from '../models';
-import { pubsub } from '../connectors';
+import { pubsub } from '../pubsub';
+
+import { withFilter } from 'graphql-subscriptions';
 
 export const NOTE_ADDED = 'noteAdded';
+export const NOTE_DELETED = 'noteDeleted';
 
 const resolvers = {
   Query: {
@@ -10,16 +13,26 @@ const resolvers = {
   },
   Mutation: {
     createNote: (_, { note }) => {
-      pubsub.publish(NOTE_ADDED, {'note': note});
-      return Note.create(note);
+      return Note.create(note)
+        .then((noteCreated) => {
+          pubsub.publish(NOTE_ADDED, { noteAdded: noteCreated });
+          return noteCreated;
+        });
     },
     deleteNote: (_, { id }) => {
-      return Note.findByIdAndDelete(id).exec();
+      return Note.findByIdAndDelete(id)
+        .then((noteDeleted) => {
+          pubsub.publish(NOTE_DELETED, { noteDeleted: noteDeleted });
+          return noteDeleted;
+        });
     }
   },
   Subscription: {
-    note: {
+    noteAdded: {
       subscribe: () => pubsub.asyncIterator(NOTE_ADDED)
+    },
+    noteDeleted: {
+      subscribe: () => pubsub.asyncIterator(NOTE_DELETED)
     }
   }
 };

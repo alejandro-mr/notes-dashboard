@@ -10,6 +10,7 @@ const noteSchema = mongoose.Schema({
   },
   width: Number,
   height: Number,
+  color: String,
 });
 
 export default mongoose.model('Note', noteSchema);

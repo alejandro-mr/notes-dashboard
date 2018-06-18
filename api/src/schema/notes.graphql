@@ -5,6 +5,7 @@ type Note {
   position: Position!
   width: Int!
   height: Int!
+  color: String!
 }
 
 type Position {
@@ -19,6 +20,7 @@ input NoteInput {
   position: PositionInput!
   width: Int!
   height: Int!
+  color: String!
 }
 
 input PositionInput {
