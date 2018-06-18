@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Mutation } from 'react-apollo';
 import Hammer from 'hammerjs';
 
@@ -36,75 +36,81 @@ const NoteWrapper = styled.div`
 
   color: rgba(0,0,0,0.8);
   //font: 400 0.875rem/1.2 'Merienda One', Helvetica, sans-serif;
-  background: rgb(255, 228, 0);
+  background: ${props => props.color || 'rgb(255, 228, 0)'};
 
-/*
+  /*
   &:hover {
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
   }
-*/
+  */
 
   &:nth-child(n+2) {
-    margin-top: 0.75rem;
+  margin-top: 0.75rem;
   }
 
   @media (min-width: 576px) {
-    min-width: 48.7%;
-    max-width: 48.7%;
-    width: auto;
-    display: inline-block;
-    margin-right: 0.938rem;
-    margin-bottom: 0.75rem;
+  min-width: 48.7%;
+  max-width: 48.7%;
+  width: auto;
+  display: inline-block;
+  margin-right: 0.938rem;
+  margin-bottom: 0.75rem;
 
-    &:nth-child(even) {
-      margin-right: 0; 
-    }
+  &:nth-child(even) {
+  margin-right: 0; 
+  }
 
-    &:nth-child(n+2) {
-      margin-top: 0;
-    }
+  &:nth-child(n+2) {
+  margin-top: 0;
+  }
   }
 
   @media (min-width: 768px) {
-    position: absolute;
-    background: none;
-    width: 15rem;
-    height: 15rem;
-    min-width: 13rem;
-    min-height: 13rem;
-    max-width: 32rem;
-    max-height: 32rem;
+  position: absolute;
+  background: none;
+  width: 15rem;
+  height: 15rem;
+  min-width: 13rem;
+  min-height: 13rem;
+  max-width: 32rem;
+  max-height: 32rem;
 
-    &::before {
-      z-index: -2;
-      content: "";
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      background: rgb(255, 228, 0);
-      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2.813rem), calc(100% - 2.813rem) calc(100% - 2.813rem), calc(100% - 2.813rem) 100%, 0 100%);
+  &::before {
+  z-index: -2;
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: ${props => props.color || 'rgb(255, 228, 0)'};
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2.813rem), calc(100% - 2.813rem) calc(100% - 2.813rem), calc(100% - 2.813rem) 100%, 0 100%);
+  }
+
+  ${props => props.color && css`
+    ${NoteResizer}::before {
+      background: ${props => props.color || 'rgb(255, 228, 0)'};
     }
-  }
+  `}
+}
 
-  @media (min-width: 992px) {
-    width: 18rem;
-    height: 18rem;
-    padding: 0;
-  }
+@media (min-width: 992px) {
+  width: 18rem;
+  height: 18rem;
+  padding: 0;
+}
 `;
 
 const NoteText = styled.p`
-  overflow: hidden;
-  height: 100%;
-  min-height: 1.125rem;
-  max-height: 12.33375rem;
-  margin-bottom: 0;
+overflow: hidden;
+height: 100%;
+min-height: 1.125rem;
+max-height: 12.33375rem;
+margin-bottom: 0;
 
-  @media (min-width: 992px) {
-    padding: 0.625rem 0.9375rem; 
-  }
+@media (min-width: 992px) {
+  padding: 0.625rem 0.9375rem; 
+}
 `;
 
 const NoteResizer = styled.div`
@@ -121,7 +127,7 @@ const NoteResizer = styled.div`
     */
 
     &::before {
-      background: rgb(255, 228, 0);
+//      background: ${NoteWrapper => NoteWrapper.background || 'rgb(255, 228, 0)'};
       content: "";
       position: absolute;
       bottom: 0;
@@ -184,7 +190,7 @@ class Note extends Component<Props> {
 
   render() {
     return (
-      <NoteWrapper innerRef={note => { this.note = note }}>
+      <NoteWrapper color={this.props.color} innerRef={note => { this.note = note }}>
         <Mutation mutation={DELETE_NOTE}>
           {(deleteNote, { loading, error }) => (
             <NoteDelete
@@ -217,7 +223,7 @@ class Note extends Component<Props> {
                     }
                   });
               }}
-            >
+              >
               <i className="material-icons">
                 clear
               </i>

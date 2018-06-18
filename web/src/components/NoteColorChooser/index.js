@@ -31,17 +31,16 @@ const Color = styled.div`
 `;
 
 const NoteColorChooser = (props) => {
-return (
+  return (
     <Chooser>
       {NOTE_COLORS.map((color, i) => (
         <Color key={i}
           color={color}
-          onClick={e => {
-              console.log(color);
-          }}
-        ></Color>
+          onClick={ e => (props.setColor(color)) }
+          ></Color>
       ))}
     </Chooser>
-)};
+  )
+};
 
 export default NoteColorChooser;

@@ -54,47 +54,47 @@ class NotesContainer extends Component {
              if (error) return <p>An error ocurred...</p>;
 
              return <NoteList
-               notes={data.notes}
-               subscribeToNewNotes={() => {
-                 subscribeToMore({
-                   document: NOTE_CREATED,
-                   updateQuery: (prev, { subscriptionData }) => {
-                     if (!subscriptionData.data) return prev;
+                      notes={data.notes}
+                      subscribeToNewNotes={() => {
+                          subscribeToMore({
+                            document: NOTE_CREATED,
+                            updateQuery: (prev, { subscriptionData }) => {
+                              if (!subscriptionData.data) return prev;
 
-                     return {
-                       ...prev,
-                       notes: [
-                         ...prev.notes,
-                         subscriptionData.data.noteAdded
-                       ]
-                     };
-                   }
-                 });
-               }}
-               subscribeToDeletedNote={() => {
-                 subscribeToMore({
-                   document: NOTE_DELETED,
-                   updateQuery: (prev, { subscriptionData }) => {
-                     if (!subscriptionData.data) return prev;
+                              return {
+                                ...prev,
+                                notes: [
+                                  ...prev.notes,
+                                  subscriptionData.data.noteAdded
+                                ]
+                              };
+                            }
+                          });
+                      }}
+                      subscribeToDeletedNote={() => {
+                          subscribeToMore({
+                            document: NOTE_DELETED,
+                            updateQuery: (prev, { subscriptionData }) => {
+                              if (!subscriptionData.data) return prev;
 
-                     const index = prev.notes.findIndex(note =>
-                       (note._id === subscriptionData.data.noteDeleted._id)
-                     );
+                              const index = prev.notes.findIndex(note =>
+                                (note._id === subscriptionData.data.noteDeleted._id)
+                              );
 
-                     if (index > 0) {
-                       return {
-                         ...prev,
-                         notes: [
-                           ...prev.notes.slice(0, index),
-                           ...prev.notes.slice(index + 1)
-                         ]
-                       };
-                     } else {
-                       return prev;
-                     }
-                   }
-                 });
-               }}
+                              if (index > 0) {
+                                return {
+                                  ...prev,
+                                  notes: [
+                                    ...prev.notes.slice(0, index),
+                                    ...prev.notes.slice(index + 1)
+                                  ]
+                                };
+                              } else {
+                                return prev;
+                              }
+                            }
+                          });
+                      }}
              />
           }}
         </Query>
@@ -107,20 +107,11 @@ class NotesContainer extends Component {
                    {toggleEditing => (
                      <Mutation mutation={ADD_NOTE}>
                        {(addNote, { loading, error }) => (
-                         <NewNoteForm toggleCreating={toggleEditing} createNote={(content) => {
+                         <NewNoteForm toggleCreating={toggleEditing} createNote={
+                           ( note ) => {
                              addNote({
                                variables: {
-                                 note: {
-                                   title: '',
-                                   content,
-                                   position: {
-                                     x: 0,
-                                     y: 0,
-                                     z: 0
-                                   },
-                                   width: 268,
-                                   height: 268
-                                 }
+                                 note
                                },
                                update: (cache, { data: { createNote }}) => {
                                  const data = cache.readQuery({ query: GET_NOTES });
@@ -146,8 +137,8 @@ class NotesContainer extends Component {
                                  createNote: {
                                    __typename: 'Note',
                                    _id: '',
-                                   title: '',
-                                   content: content,
+                                   title: note.title,
+                                   content: note.content,
                                    position: {
                                      __typename: 'Position',
                                      x: 0,
@@ -155,11 +146,12 @@ class NotesContainer extends Component {
                                      z: 0,
                                    },
                                    width: 268,
-                                   height: 268
+                                   height: 268,
+                                   color: note.color
                                  }
                                }
                              });
-                         }} />
+                           }} />
                        )}
                      </Mutation>
                    )}

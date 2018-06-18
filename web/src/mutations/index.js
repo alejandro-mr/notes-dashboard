@@ -13,6 +13,7 @@ export const ADD_NOTE = gql`
       }
       width
       height
+      color
     }
   }
 `;

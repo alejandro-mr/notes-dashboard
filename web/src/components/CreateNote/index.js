@@ -1,10 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import ColorChooser from '../NoteColorChooser';
-
 const CreateNoteButton = styled.div`
-  border-radius: 50%;
+  border-radius: 49%;
   //border: 1px solid #c5c5c5;
   background: #5d4037;
   width: 3.5rem;
@@ -38,17 +36,14 @@ const CreateNoteButton = styled.div`
 `;
 
 const CreateNote = (props) => (
-  <React.Fragment>
-  <ColorChooser  />
   <CreateNoteButton onClick={e => {
       e.preventDefault();
       props.toggleCreating();
   }}>
     <i role="img" aria-label="Add Note" className="material-icons">
       create
-    </i> 
+    </i>
   </CreateNoteButton>
-  </React.Fragment>
 );
 
 export default CreateNote;

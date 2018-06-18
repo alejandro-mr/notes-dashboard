@@ -4,6 +4,9 @@ import React, {
 
 import styled from 'styled-components';
 
+import ColorChooser from '../NoteColorChooser';
+import { NOTE_COLORS } from '../../constants';
+
 const FormWrapper = styled.div`
   position: fixed;
   bottom: 0;
@@ -62,15 +65,19 @@ class NewNoteForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
-      content: '',
-      position: {
-        x: 0,
-        y: 0,
-        z: 0,
-      },
-      width: 268,
-      height: 268
+      colorSet: false,
+      note: {
+        title: '',
+        content: '',
+        position: {
+          x: 0,
+          y: 0,
+          z: 0,
+        },
+        width: 268,
+        height: 268,
+        color: NOTE_COLORS[0]
+      }
     }
   }
 
@@ -79,7 +86,10 @@ class NewNoteForm extends Component {
     this.setState((prev, props) => {
        return {
         ...prev,
-        content: content
+        note: {
+          ...prev.note,
+          content: content
+        }
       }
     });
   }
@@ -89,25 +99,46 @@ class NewNoteForm extends Component {
     this.setState((prev, _) => {
       return {
         ...prev,
-        title: title
+        note: {
+          ...prev.note,
+          title: title
+        }
+      }
+    });
+  }
+
+  setColor = (color) => {
+    this.setState((prev, _) => {
+      return {
+        ...prev,
+        note: {
+          ...prev.note,
+          color: color
+        },
+        colorSet: true
       }
     });
   }
 
   submitForm = e => {
     e.preventDefault();
-    this.props.createNote(this.state.content);
+    this.props.createNote(this.state.note);
     this.props.toggleCreating();
   }
 
   render() {
     return (
       <FormWrapper>
+      { !this.state.colorSet &&
+        <ColorChooser setColor={this.setColor} />
+      }
+      { this.state.colorSet &&
         <Form onSubmit={this.submitForm}>
           <Title type="text" value={this.state.title} onChange={this.setTitle} />
           <Content value={this.state.content} onChange={this.setContent} />
           <Submit type="submit" />
         </Form>
+      }
       </FormWrapper>
     )
   }

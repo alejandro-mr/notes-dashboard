@@ -13,6 +13,7 @@ export const GET_NOTES = gql`
       }
       width
       height
+      color
     }
   }
 `;
@@ -30,6 +31,7 @@ export const GET_NOTE = gql`
       }
       width
       height
+      color
     }
   }
 `;
